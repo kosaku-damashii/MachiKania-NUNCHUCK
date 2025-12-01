@@ -18,13 +18,13 @@ WHILE 1
  SX=PEEK(DA)
  SY=PEEK(DA+1)
 
+ A=PEEK(DA+5)
+ BC=GOSUB(BITREAD,A,1)
+ BZ=GOSUB(BITREAD,A,0)
 
- BC=GOSUB(BITREAD,PEEK(DA+5),1)
- BZ=GOSUB(BITREAD,PEEK(DA+5),0)
-
- GX = (PEEK(DA+2) << 2) OR ((PEEK(DA+5) AND $0C) >> 2)
- GY = (PEEK(DA+3) << 2) OR ((PEEK(DA+5) AND $30) >> 4)
- GZ = (PEEK(DA+4) << 2) OR ((PEEK(DA+5) AND $C0) >> 6)
+ GX = (PEEK(DA+2) << 2) OR ((A AND $0C) >> 2)
+ GY = (PEEK(DA+3) << 2) OR ((A AND $30) >> 4)
+ GZ = (PEEK(DA+4) << 2) OR ((A AND $C0) >> 6)
 
  PRINT "C=";BC;" Z=";BZ;" x=";SX;" y=";SY;" X=";GX;" Y=";GY;" Z=";GZ
 
@@ -35,7 +35,4 @@ WEND
 END
 
 LABEL BITREAD
- R = ARGS(1)
- R = R AND (1 << (ARGS(2)))
- R = R >> ARGS(2)
-RETURN R
+RETURN (ARGS(1) AND (1 << (ARGS(2)))) >> ARGS(2)
